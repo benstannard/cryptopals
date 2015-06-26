@@ -1,0 +1,124 @@
+Cryptopals Rule.
+1. Always operate on raw bytes, never on encoded strings. Only use hex and base64 for pretty printing.
+2. In repeating-key XOR, you'll sequentially apply each byte of the key; the first byte of plaintext will be XOR'd against, I, the next C, the next E, then I again for the 4th byte and so on. Now the length of key != length of string.
+
+Other Rules
+2. Code breakers look for information leak, like a fingerprint on the faucet.
+3. Remember, there is no such thing as a lucky number, or a lucky sequence.
+4. Python has native support for hexadecimal integer literlas, with the 0x prefix
+5. "Hexadecimal" is just a presentation detail, the arithmetic is done in binary, and then result is printed in hex
+6. hex() function can be used to convert any number into a hexadecimal string for display
+7. Binary bitwise operations.
+   & -> yields the bitwise AND of its arguments, which must be integers
+   ^ -> yields the bitwise XOR of its arguments, which must be integers
+   | -> yields the bitwise OR of its arguments, which must be integers
+
+8. binascii.unhexlify(hexstr) -> returns binary data representation by the hexadecimal string hexstr. must contain even number of hexadecimal digits.
+9. binascii contains a number of methods to convert between binary and varisou ASCII-encoded binary representations.
+10. python -o myscript.py # assertions will be stripped out and not evaluateed.
+11. The leading \x means the next two characters are interpreted as hex digits, so \xaa == chr(0xaa) == chr(16*10 + 10) == 'a'
+   
+Notes:
+Eve = Codebreaker
+2^number of bits. 2*8=256
+On Aug 5 1857, a 4,300km cable was laid in Alantic Ocean so we chould communicate with Europe.
+Encryption is a locked message in a box. Decryption is unlocking the box. In real world, we abondon boxes and use ciphers. 
+
+
+DECRYPT REPEATING-KEY XOR ("Vigenere")
+1. Let KEYSIZE be the guessed length of the key; try values 2 to (say) 40
+2. Write a function to compute the edit distance/Hamming distance between two strings. The Hamming distance is just the number of differing bits. It counts the number of symbols in the string that are different. 
+
+
+MIN EDIT DISTANCE & HAMMING DISTANCE
+Why does this work? (SO#8115). Because plaintext is not uniformly random. Two random English letters, encoded in ascii, the expected value is maybe 2-3 bits. It two random 8-bit bytes, expected difference is 4 bits, significantly larger. If you look at sequences of multiple characters, rather than a single letter, difference becomes even larger.
+
+The minimum edit distance between two strings is the minimum number of editing operations (insert, delete, substitution) need to transform one into the other.
+
+
+CAESAR CIPHER
+Letter frequencies in the native language are a very important tool. Frequency analysis was used to break ciphers where you would just shift all the letters n number of spots.
+
+POLYALPHABETIC CIPHER
+A strong cipher will disguise your fingerprint(letter frequency). We agree on a word snake(19-14-1-11-5). Repeat this patter over out message shifting the letters by vaules in the word snake. Eve will find a flatter distribution of letter frequencies. But anytime they is a difference in letter frequencies, there is information. How to BREAK: we need to determine the length of the shift word used, not the word itself. When she checkes the frequency distribution of every 5th letter, the frequency will reveal itself. The longer the shift word, the stronger the cipher.
+
+FREQUENCY STABILITY PROPERTY
+How can you tell what is a choice flip and what is made up by humans? Humans guess in uneven patterns which over time will become visible through charting. Look for sequences of numnbers rather than totals.
+
+THE ONE-TIME PAD.
+How can you desgin a cipher to hide fingerprint(letter frequency?). Randomness
+You have a message that is 100-letters long. Roll a 26-side die 100 times and for each roll, use the dice result as the number of shifts you move to the right of the actual letter. This now introduces giant proporations of randomness in the random shifts. It's important that the cipher is the length of the message to remove any statistical properties of words. Each letter can be equally likely (uniform distribution).
+
+For 5-letter word, say Alice, 1 time-pad will result in, 26*26*26*26*26 possibilities or 11.8 million possibilities.
+
+ENIGMA (Great video!)
+Attempt to automate the one-time pad using rotor configuration. Always allow letter to be mapped to themselves otherwise you are shrinking the key space.
+
+Perfect Secrecy.
+If you put a card in a box, the remaining cards leak information, the locks & box are a decoy. Instead, keep card in the deck and shuffle to randomize. The best Eve can do is guess, this defines "perfect secrecy", the size of the key space, is the same size of the message space and ciphertext space.
+
+PSEUDORANDOM NUMBER GENERATORS
+We find random flucations in the physical world. When we measure this, called SAMPLING, we can generate a random sequence. Random walk -> lack of pattern at all scales. Von Neumon developed the middle squares method.
+
+MODULAR MATH AND SHIFT CIPHER
+key -> K, interger from 0-25. for every letter in message M, convert letters in M to match its order in alphabet, (a=0, b=1, c=2...y=24, z=25)
+Calculate Y = (X + K) mod 26. Convert Y into letter in matches in alphabet.
+example: K=19
+K      H      A      N
+10     7      0      13
+19     19     19     19
+------------------------
+(29    26     19     32) mod 26
+3      0      19     6
+------------------------
+D      A      T      G
+
+
+XOR BITWISE OPERATION
+One-time pad is untimate shift cipher. It's the application of a random list of shifts equal to the length of the message. Really cool example of using the picture of Charles Babbage
+
+Binary RGB (Red=156, Green=181, Blue=58) representation of Khan Academy green:
+10011100 + 10110101 + 00111010: 100111001011010100111010.
+Generate a random shift sequences using coin flips converted in binary: 010110100001101111011000
+
+FALSE = 0, off
+TRUE = 1, on
+AND logical conjunction, just like multiplication. It outputs a 1, only if all of the inputs are 1.
+0 AND 0 = 0
+0 AND 1 = 0
+1 AND 0 = 0
+1 AND 1 = 1
+
+OR logical disjuntion. It outputs a 1 whenever one or more its inputs are 1.
+0 OR 0 = 0
+0 OR 1 = 1
+1 OR 0 = 1
+1 OR 1 = 1
+
+XOR outputs 1 whenenver the inputs do not match, which occurs when one of the two inputs is exclusively True.
+0 XOR 0 = 0
+0 XOR 1 = 1
+1 XOR 0 = 1
+1 XOR 1 = 0
+
+MODULAR MATH
+A mod B = (A + K * B) mod B for any interger K
+When we are only interested in remainder of A/B, we use modulo operator, abbreviated as mod
+(A / B) = Quotient remainder R. 13/5 = 2 remainder 3
+A mod B = R. 13 mod 5 = 3
+(0 / 3) = 0 remainder 0
+(1 / 3) = 0 remainder 1 
+(2 / 3) = 0 remainder 2
+(3 / 3) = 1 remainder 0
+(4 / 3) = 1 remainder 1
+(5 / 3) = 1 remainder 2 
+(6 / 3) = 1 remainder 0
+
+A mod B using clocks, a normal clock would be X mod 12:
+1. Construct this clock for size B
+2. Start at - and move around the clock in A steps
+3. Wherever we land is our solution.
+
+8 mod 4 = 0
+7 mod 2 = 1
+-5 mod 3 = 1 (just go counter clockwise)

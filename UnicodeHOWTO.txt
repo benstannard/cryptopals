@@ -1,0 +1,24 @@
+IN 1968, the American Standard Code ofr Information Interchange (ASCII) was standardized. ASCII
+defined numeric codes for various characers, with numeric values running from 0 to 127. For example,
+the lowercase letter 'a' is assigned 97 as its code value.
+
+In 1980s all computer we 8-bit, meaning that bytes could range from 0-255.
+2^8 = 256
+
+A CHARACTER is the smallest compnent of text. 'A', 'B' 'x' are all different characters.
+
+The Unicode standard describes how characters are represented by CODE POINTS. A code point is an
+integer value, usualy denoted in base 16.
+
+A Unicode string is a sequence of code points. This sequence needs to be represented as a set
+of bytes in memory.
+
+The rules for translating a Unicode string into a sequence of bytes is called an ENCODING.
+
+UTF-8 is one of the most commonly used encodings. UTF stands for "Unicode Transformation Format" and
+the '8' means that 8-bit numbers are used in the encoding.
+    if code point is < 128 it is represented by the corresponing byte value
+    if code point is > = 128, its turned into a sequence of two, three, or four bytes.
+
+
+Python 3.0 default encoding UTF-8, so you can include Unicode charcters in a string literal.
