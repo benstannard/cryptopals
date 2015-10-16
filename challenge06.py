@@ -1,4 +1,4 @@
-# Breaking repeating-key XOR
+# It is offically on, now => Breaking repeating-key XOR
 # File ('6.txt') as been based64'd after being encrypted with repeating-key XOR.
 import base64
 import itertools

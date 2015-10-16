@@ -1,3 +1,4 @@
+# Detect single-characer XOR
 import binascii
 from cf import score, break_single_byte_XOR
 

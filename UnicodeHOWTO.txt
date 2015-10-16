@@ -1,8 +1,8 @@
-IN 1968, the American Standard Code ofr Information Interchange (ASCII) was standardized. ASCII
+IN 1968, the American Standard Code for Information Interchange (ASCII) was standardized. ASCII
 defined numeric codes for various characers, with numeric values running from 0 to 127. For example,
 the lowercase letter 'a' is assigned 97 as its code value.
 
-In 1980s all computer we 8-bit, meaning that bytes could range from 0-255.
+In 1980s all computer were 8-bit, meaning that bytes could range from 0-255.
 2^8 = 256
 
 A CHARACTER is the smallest compnent of text. 'A', 'B' 'x' are all different characters.

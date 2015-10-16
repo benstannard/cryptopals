@@ -1,3 +1,4 @@
+# Single-byte XOR cipher
 '''
 Single-byte XOR cipher
 The hex encoded string:
@@ -54,7 +55,7 @@ def score(s):
     return score
 
 
-def breakSingleByteXOR(s):
+def break_single_byte_xor(s):
     def key(p):
         return score(p[1]) # 2nd element in tuple below
     return max([(i, strxor_c(s, i)) for i in range(0, 256)], key=key)
@@ -62,7 +63,7 @@ def breakSingleByteXOR(s):
 if __name__ == '__main__':
     encodedS = '1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736'
     s = binascii.unhexlify(encodedS)
-    print(breakSingleByteXOR(s))
+    print(break_single_byte_xor(s))
 
 
     

@@ -8,7 +8,7 @@ y = 'SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t'
 def convert_to_base64(s):
     "input a string type hex. output to base64."
     decoded = binascii.unhexlify(s)
-    return base64.b64encode(decoded).decode('ascii')
+    return base64.b64encode(decoded).decode('utf-8')
 
 def test():
     assert convert_to_base64(x) == y

@@ -10,8 +10,8 @@ key = 'ICE'
 
 def repeating_key_xor(text, key):
     """
-    Inputs: plaintext & key. If not bytes, convert to bytes
-    Function XOR each letter in plaintext in repeating cycle against key, allowing key length != length of plaintext.
+    Inputs: plaintext & key. If not bytes, convert to bytes.
+    Function: XOR each letter in plaintext in repeating cycle against key, allowing key length != length of plaintext.
     Returns: Encrypted Ciphertext. From bytes doc: bytes(iterable_of_ints) -> immutable array of bytes. 
     """
     if not isinstance(text, bytes):
