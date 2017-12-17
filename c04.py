@@ -1,11 +1,18 @@
 # Detect single-characer XOR
-import binascii
-from cf import score, break_single_byte_XOR
+from binascii import unhexlify
+from cpals import decrypt_xorc, score, freqs
+
 
 def f(filename=None):
-    decoded_lines = [binascii.unhexlify(lines.strip()) for lines in open(filename).readlines()]
-    best_text = [break_single_byte_XOR(i)[1] for i in decoded_lines] # index tuple
-    return max(best_text, key=score)
+    lines = [unhexlify(lines.strip()) for lines in open(filename).readlines()]
+    decoded = [decrypt_xorc(line) for line in lines]
+    scored = sorted([(score(line[1]), line) for line in decoded])
+    return max(scored)
 
-result = f('4.txt')
-print(result)
+
+def test():
+    result = f('4.txt')
+    print(result)
+
+
+test()

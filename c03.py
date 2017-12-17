@@ -1,17 +1,8 @@
 # Single-byte XOR cipher
-'''
-Single-byte XOR cipher
-The hex encoded string:
+from binascii import unhexlify
+from cpals import decrypt_xorc
 
-1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736
-... has been XOR'd against a single character. Find the key, decrypt the message.
-
-You can do this by hand. But don't: write code to do it for you.
-
-How? Devise some method for "scoring" a piece of English plaintext. Character frequency is a good metric. Evaluate each output and choose the one with the best score.
-'''
-import binascii
-from Crypto.Util.strxor import strxor_c
+A = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
 
 # From http://www.data-compression.com/english.html
 freqs = {
@@ -41,32 +32,12 @@ freqs = {
     'x': 0.0013692,
     'y': 0.0145984,
     'z': 0.0007836,
-    ' ': 0.1918182 
+    ' ': 0.1918182
 }
 
-def score(s):
-    score = 0
-    for i in s:
-        c = chr(i).lower()
-        if c in freqs:
-            score += freqs[c]
-    print("chr: {} has score of {}".format(c, score))
-    print("resulting string -> {}".format(s))
-    return score
 
+def test():
+    rv = decrypt_xorc(unhexlify(A))
+    print("Result:", rv)
 
-def break_single_byte_xor(s):
-    def key(p):
-        return score(p[1]) # 2nd element in tuple below
-    return max([(i, strxor_c(s, i)) for i in range(0, 256)], key=key)
-
-if __name__ == '__main__':
-    encodedS = '1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736'
-    s = binascii.unhexlify(encodedS)
-    print(break_single_byte_xor(s))
-
-
-    
-    
-
-
+test()

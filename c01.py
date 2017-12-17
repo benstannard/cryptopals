@@ -12,7 +12,7 @@ def hex_to_base64(s):
 
 def test():
     assert hex_to_base64(x) == y
-    print("[+] All test passed")
+    print("Test passed")
 
 
 test()
