@@ -1,6 +1,9 @@
 # cpals.py - Collection of crypto functions used
 # All functions assume input is raw bytes. Unhexlify(input_params) when calling each function.
 from binascii import unhexlify
+from itertools import *
+import base64
+
 
 def xor(a, b):
     return bytes([x ^ y for x, y in zip(a, b)])
@@ -8,11 +11,26 @@ def xor(a, b):
 def xorc(plain, key): # single character
     return xor(plain, bytes([key] * len(plain)))
 
+def rxor(plain, key): # repeating key XOR
+    return bytes([plain[i] ^ key[i % len(key)] for i in range(len(plain))])
+
+def hamming(x, y): # Hamming Distance
+    return sum([bin(x[i] ^ y[i]).count('1') for i in range(min(len(x), len(y)))])
+     
 def decrypt_xorc(buffer=None):
     "XOR each byte against input buffer and score with highest char frequency for best/max result"
     def key(s):
         return score(s[1]) 
     return max([(n, xorc(buffer, n)) for n in range(256)], key=key)
+
+def score(s):
+    "Func to score text based on character frequencies. Use max(..., key=score)"
+    score = 0
+    for i in s:
+        c = chr(i).lower()
+        if c in freqs:
+            score += freqs[c]
+    return score
 
 # From http://www.data-compression.com/english.html
 freqs = {
@@ -45,11 +63,10 @@ freqs = {
     ' ': 0.1918182
 }
 
-def score(s):
-    "Func to score text based on character frequencies. Use max(..., key=score)"
-    score = 0
-    for i in s:
-        c = chr(i).lower()
-        if c in freqs:
-            score += freqs[c]
-    return score
+
+def test():
+    assert(hamming(b'this is a test', b'wokka wokka!!!') == 37)
+
+    print("Test pass")
+
+test()
