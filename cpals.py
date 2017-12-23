@@ -1,11 +1,11 @@
 # cpals.py - Collection of crypto functions used
-# All functions assume input is raw bytes. Unhexlify(input_params) when calling each function.
+# All functions assume input is raw bytes. binascii.unhexlify(input_params) when calling each function.
 from binascii import unhexlify
 from itertools import *
 import base64
 
 
-def xor(a, b):
+def xor(a, b): # XOR
     return bytes([x ^ y for x, y in zip(a, b)])
 
 def xorc(plain, key): # single character
@@ -16,21 +16,43 @@ def rxor(plain, key): # repeating key XOR
 
 def hamming(x, y): # Hamming Distance
     return sum([bin(x[i] ^ y[i]).count('1') for i in range(min(len(x), len(y)))])
-     
+
 def decrypt_xorc(buffer=None):
-    "XOR each byte against input buffer and score with highest char frequency for best/max result"
+    """XOR each byte against input buffer and score with highest char frequency for best/max result"""
     def key(s):
-        return score(s[1]) 
+        return score(s[1])
     return max([(n, xorc(buffer, n)) for n in range(256)], key=key)
 
 def score(s):
-    "Func to score text based on character frequencies. Use max(..., key=score)"
+    """Func to score text based on character frequencies. Use max(..., key=score)"""
     score = 0
     for i in s:
         c = chr(i).lower()
         if c in freqs:
             score += freqs[c]
     return score
+
+def normalized_edit_distance(plain, key):
+    blocks = [plain[i:i+key] for i in range(0, len(plain), key)][:4]
+    pairs = list(combinations(blocks, 2))
+    scores = [hamming(p[0], p[1])/float(key) for p in pairs]
+    return sum(scores) / len(scores)
+
+
+def break_repeating_key_XOR(plain, k): # returns key
+    blocks = [plain[i:i+k] for i in range(0, len(plain), k)]
+    transposed_blocks = list(zip_longest(*blocks, fillvalue=0))
+    key = [decrypt_xorc(bytes(x))[0] for x in transposed_blocks] # [0] returns the byte/codepoint
+    return bytes(key)
+
+
+def brxor(buffer, n=41): # break repeating key XOR
+    k = min(range(2, n), key=lambda k: normalized_edit_distance(buffer, k))
+    key = break_repeating_key_XOR(text, k)
+    return key
+
+
+
 
 # From http://www.data-compression.com/english.html
 freqs = {
