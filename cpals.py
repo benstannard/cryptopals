@@ -8,11 +8,11 @@ import base64
 def xor(a, b): # XOR
     return bytes([x ^ y for x, y in zip(a, b)])
 
-def xorc(plain, key): # single character
-    return xor(plain, bytes([key] * len(plain)))
+def xorc(buffer, key): # single character
+    return xor(buffer, bytes([key] * len(buffer)))
 
-def rxor(plain, key): # repeating key XOR
-    return bytes([plain[i] ^ key[i % len(key)] for i in range(len(plain))])
+def rxor(buffer, key): # repeating key XOR
+    return bytes([buffer[i] ^ key[i % len(key)] for i in range(len(buffer))])
 
 def hamming(x, y): # Hamming Distance
     return sum([bin(x[i] ^ y[i]).count('1') for i in range(min(len(x), len(y)))])
@@ -32,15 +32,15 @@ def score(s):
             score += freqs[c]
     return score
 
-def normalized_edit_distance(plain, key):
-    blocks = [plain[i:i+key] for i in range(0, len(plain), key)][:4]
+def normalized_edit_distance(buffer, key):
+    blocks = [buffer[i:i+key] for i in range(0, len(buffer), key)][:4]
     pairs = list(combinations(blocks, 2))
     scores = [hamming(p[0], p[1])/float(key) for p in pairs]
     return sum(scores) / len(scores)
 
 
-def break_repeating_key_XOR(plain, k): # returns key
-    blocks = [plain[i:i+k] for i in range(0, len(plain), k)]
+def break_repeating_key_XOR(buffer, k): # returns key
+    blocks = [buffer[i:i+k] for i in range(0, len(buffer), k)]
     transposed_blocks = list(zip_longest(*blocks, fillvalue=0))
     key = [decrypt_xorc(bytes(x))[0] for x in transposed_blocks] # [0] returns the byte/codepoint
     return bytes(key)
@@ -48,7 +48,7 @@ def break_repeating_key_XOR(plain, k): # returns key
 
 def brxor(buffer, n=41): # break repeating key XOR
     k = min(range(2, n), key=lambda k: normalized_edit_distance(buffer, k))
-    key = break_repeating_key_XOR(text, k)
+    key = break_repeating_key_XOR(buffer, k)
     return key
 
 

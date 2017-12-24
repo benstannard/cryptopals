@@ -20,14 +20,14 @@ def break_repeating_key_XOR(x, k):
 
 def brxor(buffer, n=41): # break repeating key XOR
     k = min(range(2, n), key=lambda k: normalized_edit_distance(buffer, k))
-    key = break_repeating_key_XOR(text, k)
+    key = break_repeating_key_XOR(buffer, k)
     return key
 
 
 # Solution
 text = base64.b64decode(open('6.txt', 'r').read())
-k = min(range(2, 41), key=lambda k: normalized_edit_distance(text, k))
-key = break_repeating_key_XOR(text, k)
-print("Key:", key)
-print("RESULT")
-print(rxor(text, key))
+# k = min(range(2, 41), key=lambda k: normalized_edit_distance(text, k))
+# key = break_repeating_key_XOR(text, k)
+# print("Key:", key)
+# print("RESULT")
+print(brxor(text))
