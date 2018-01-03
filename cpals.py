@@ -38,20 +38,16 @@ def normalized_edit_distance(buffer, key):
     scores = [hamming(p[0], p[1])/float(key) for p in pairs]
     return sum(scores) / len(scores)
 
-
 def break_repeating_key_XOR(buffer, k): # returns key
     blocks = [buffer[i:i+k] for i in range(0, len(buffer), k)]
     transposed_blocks = list(zip_longest(*blocks, fillvalue=0))
     key = [decrypt_xorc(bytes(x))[0] for x in transposed_blocks] # [0] returns the byte/codepoint
     return bytes(key)
 
-
 def brxor(buffer, n=41): # break repeating key XOR
     k = min(range(2, n), key=lambda k: normalized_edit_distance(buffer, k))
     key = break_repeating_key_XOR(buffer, k)
     return key
-
-
 
 
 # From http://www.data-compression.com/english.html
